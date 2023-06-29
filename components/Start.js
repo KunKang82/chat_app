@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ImageBackground, KeyboardAvoidingView } from 'react-native';
 
 const Start = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -53,8 +53,8 @@ const Start = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+    // justifyContent: 'center',
+    // alignItems: 'center'
   },
   textInput: {
     width: '88%',
@@ -64,34 +64,37 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 16,
     fontWeight: '300',
-    color: '#757083'
+    // color: '#757083'
+    color: 'black'
   },
   image: {
     flex: 1,
-    justifyContent: 'center',
     width: '100%',
-    height: '100%'
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   title: {
     fontSize: 45,
     fontWeight: '600',
     color: '#FFFFFF',
-    marginTop: '20%',
+    marginTop: '30%',
   },
   colorContainer: {
     flexDirection: 'row',
     width: '80%',
     justifyContent: 'space-between',
     marginTop: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   subContainer: {
     width: '88%',
     height: '44%',
     alignItems: 'center',
     justifyContent: 'space-between',
-    overflow: 'scroll',
-    marginBottom: 25
+    // overflow: 'scroll',
+    marginBottom: 25,
+    backgroundColor: 'white'
   },
   color: {
     width: 50,
@@ -102,6 +105,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '300',
     color: '#757083',
+    // color: 'black',
     opacity: 1
   },
   button: {
