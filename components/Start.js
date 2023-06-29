@@ -44,6 +44,8 @@ const Start = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </ImageBackground>
+      {/* fix for blocked view on android */}
+      {Platform.OS === 'android' ? <KeyboardAvoidingView behavior="height" /> : null}
     </View>
   );
 }
@@ -74,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 45,
     fontWeight: '600',
     color: '#FFFFFF',
-    marginTop: '20%'
+    marginTop: '20%',
   },
   colorContainer: {
     flexDirection: 'row',
