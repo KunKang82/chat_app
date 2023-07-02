@@ -1,9 +1,22 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, ImageBackground, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, ImageBackground, KeyboardAvoidingView, Alert } from 'react-native';
+import { getAuth, signInAnonymously } from "firebase/auth";
 
 const Start = ({ navigation }) => {
   const [name, setName] = useState('');
   const [color, setColor] = useState('');
+  const auth = getAuth();
+
+  const signInUser = () => {
+    signInAnonymously(auth)
+      .then(result => {
+        navigation.navigate("Chat", {userID: result.user.uid, name: name, color: color });
+        Alert.alert("Signed in Successfully!");
+      })
+      .catch((error) => {
+        Alert.alert("Unable to sign in, try later again.");
+      })
+  }
 
   return (
     <View style={styles.container}>
@@ -38,7 +51,7 @@ const Start = ({ navigation }) => {
           </View>
           <TouchableOpacity
             style={[styles.button, { backgroundColor: '#757083' }]}
-            onPress={() => navigation.navigate('Chat', { name, color })}
+            onPress={() => {signInUser(name, color)}}
           >
             <Text style={styles.buttonText}>Start Chatting</Text>
           </TouchableOpacity>
@@ -53,8 +66,6 @@ const Start = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center'
   },
   textInput: {
     width: '88%',
@@ -64,7 +75,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 16,
     fontWeight: '300',
-    // color: '#757083'
     color: 'black'
   },
   image: {
@@ -92,7 +102,6 @@ const styles = StyleSheet.create({
     height: '44%',
     alignItems: 'center',
     justifyContent: 'space-between',
-    // overflow: 'scroll',
     marginBottom: 25,
     backgroundColor: 'white'
   },
@@ -105,7 +114,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '300',
     color: '#757083',
-    // color: 'black',
     opacity: 1
   },
   button: {
