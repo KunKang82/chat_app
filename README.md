@@ -21,21 +21,26 @@ The app will provide users with a chat interface and options to share images and
 - As a user, I want to be able to read my messages offline so I can reread conversations at any time.
 - As a user with a visual impairment, I want to use a chat app that is compatible with a screen reader so that I can engage with a chat interface.
 
-# Step-by-Step guide on how to clone and set up project:
+### Technologies Used 
 
-```markdown
-## Getting Started
-
-Follow instructions to get a copy of the project up and running on your local machine for development and testing purposes.
+- React Native - front end Javascript library
+- Gifted Chat - an open-source React Native library
+- Expo - native app development platform
+- Android Studio - mobile development environemnt with Emulator
+- Google Firebase - non-relational database for storing messages. 
+- Google Firestore - storage solution for media based chat messages. 
 
 ### Prerequisites
-
-- Node.js
-- Expo CLI
-- A Firebase account
-
-### Installation
-
+```markdown
+Firebase account (https://firebase.google.com/).
+expo go account (https://expo.dev/).
+Follow expo CLI's instructions.
+Install the Expo Go app on your phone (for testing purposes)
+```
+# Step-by-Step guide on how to clone and set up project:
+## Getting Started
+Follow instructions to get a copy of the project up and running on your local machine for development and testing purposes.  
+  
 1. Clone the repo
    ```
    git clone https://github.com/KunKang82/chat_app.git
@@ -77,3 +82,5 @@ Follow instructions to get a copy of the project up and running on your local ma
    ```
 
 Now, you should be able to test the app on your local machine using the Expo app on your phone or using an emulator.
+
+![screenshot](ChatAppSS.jpg)
