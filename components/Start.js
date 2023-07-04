@@ -10,6 +10,7 @@ const Start = ({ navigation }) => {
   const signInUser = () => {
     signInAnonymously(auth)
       .then(result => {
+        // Pass the user's name and selected background color
         navigation.navigate("Chat", {userID: result.user.uid, name: name, color: color });
         Alert.alert("Signed in Successfully!");
       })

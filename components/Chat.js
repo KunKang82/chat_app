@@ -3,8 +3,10 @@ import { StyleSheet, View, Platform, KeyboardAvoidingView } from 'react-native';
 import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat';
 import { collection, query, orderBy, addDoc, onSnapshot } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import CustomActions from './CustomActions';
+import MapView from 'react-native-maps';
 
-const Chat = ({ route, navigation, db, isConnected }) => {
+const Chat = ({ route, navigation, db, isConnected, storage }) => {
 
   // Destructre the parameters form the route object
   const { name, color, userID } = route.params;
@@ -60,14 +62,14 @@ const Chat = ({ route, navigation, db, isConnected }) => {
   const loadCachedMessages = async () => {
     // || [] will assign an empty array to cachedMessages in case AsyncStorage.getItem("chat") fails when the chat item has 
     // been set yet in AsyncStorage. Known as "logical OR assignment operator" in jS
-    const cachedMessages = await AsyncStorage.getItem("chat") || [];
+    const cachedMessages = await AsyncStorage.getItem("messages") || [];
     setMessages(JSON.parse(cachedMessages));
   }
 
   // same logic as when using localStorage, and "try-catch" is an error handler to prevent the app from crashing in case
   const cacheMessages = async (messagesToCache) => {
     try {
-      await AsyncStorage.setItem('chat', JSON.stringify(messagesToCache));
+      await AsyncStorage.setItem('messages', JSON.stringify(messagesToCache));
     } catch (error) {
       console.log(error.message);
     }
@@ -93,10 +95,36 @@ const Chat = ({ route, navigation, db, isConnected }) => {
     />
   }
 
-  // Render the input toolbar if connected
+  // Render the input toolbar if connected to online
   const renderInputToolbar = (props) => {
     if (isConnected) return <InputToolbar {...props} />;
     else return null;
+  }
+
+  const renderCustomActions = (props) => {
+    return <CustomActions userID={userID} storage={storage} {...props} />;
+  };
+
+  // Render  element with map and geolocation
+  const renderCustomView = (props) => {
+    const { currentMessage} = props;
+    if (currentMessage.location) { // render a amp
+      return (
+          <MapView
+            style={{width: 150,
+              height: 100,
+              borderRadius: 13,
+              margin: 3}}
+            region={{
+              latitude: currentMessage.location.latitude,
+              longitude: currentMessage.location.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          />
+      );
+    }
+    return null;
   }
 
   // Render the Chat component
@@ -108,9 +136,11 @@ const Chat = ({ route, navigation, db, isConnected }) => {
         renderBubble={renderBubble}
         renderInputToolbar={renderInputToolbar} //function that returns <InputToolbar {...props}/> if there’s a connection, otherwise, it returns a null
         onSend={messages => onSend(messages)}
+        renderActions={renderCustomActions}
+        renderCustomView={renderCustomView}
         user={{
           _id: userID,
-          name: name
+          name
         }}
       />
       {/* fix for blocked view on android */}
@@ -122,6 +152,18 @@ const Chat = ({ route, navigation, db, isConnected }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  logoutButton: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    backgroundColor: "#C00",
+    padding: 10,
+    zIndex: 1
+  },
+  logoutButtonText: {
+    color: "#FFF",
+    fontSize: 10
   }
 });
 

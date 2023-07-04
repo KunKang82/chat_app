@@ -10,19 +10,42 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { initializeApp } from "firebase/app";
 import { getFirestore, disableNetwork, enableNetwork } from "firebase/firestore";
 
+import { getStorage } from "firebase/storage";
+
 // NetInfo for detecting a Network Connection
 import { useNetInfo } from '@react-native-community/netinfo';
 
 import { useEffect } from "react";
-import { Alert } from "react-native";
+import { Alert, LogBox } from "react-native";
 
 // Create the navigator
 const Stack = createNativeStackNavigator();
+
+LogBox.ignoreLogs(["AsyncStorage has been extracted from"]);
 
 // The app’s main Chat component that renders the chat UI
 const App = () => {
   // Defines a new state that represents the network connectivity status
   const connectionStatus = useNetInfo();
+  
+  // Web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAh216Ud4G42LCeZQSX1eYy-LtMHLbWbvQ",
+    authDomain: "chatapp-be8d0.firebaseapp.com",
+    projectId: "chatapp-be8d0",
+    storageBucket: "chatapp-be8d0.appspot.com",
+    messagingSenderId: "579769078008",
+    appId: "1:579769078008:web:b70d7ea19f4d019370eb0d"
+  };
+  
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  
+  // Initialize Cloud Firestore and get a reference to the service
+  const db = getFirestore(app);
+
+  // Initialize Firebase Storage handler
+  const storage = getStorage(app);
   
   // Displays an alert popup if connection is lost and load offline messages from cache
   useEffect(() => {
@@ -33,22 +56,6 @@ const App = () => {
       enableNetwork(db);
     }
   }, [connectionStatus.isConnected]);
-
-  // Web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyAh216Ud4G42LCeZQSX1eYy-LtMHLbWbvQ",
-    authDomain: "chatapp-be8d0.firebaseapp.com",
-    projectId: "chatapp-be8d0",
-    storageBucket: "chatapp-be8d0.appspot.com",
-    messagingSenderId: "579769078008",
-    appId: "1:579769078008:web:b70d7ea19f4d019370eb0d"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-
-  // Initialize Cloud Firestore and get a reference to the service
-  const db = getFirestore(app);
 
   return (
     // NavigationContainer navigates between start and chat screens
@@ -63,7 +70,7 @@ const App = () => {
         <Stack.Screen
           name="Chat"
         >
-          {props => <Chat isConnected={connectionStatus.isConnected} db={db} {...props} />}
+          {props => <Chat isConnected={connectionStatus.isConnected} db={db} storage={storage} {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
